@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Noto PDF Reader</title>
+
+    <style>
+        /* === BASE STYLES === */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0d0e0f;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            color: white;
+        }
+
+        /* === PANEL === */
+        #app {
+            width: 400px;
+            height: 600px;
+            background-color: #1b1c1d;
+            border: 1px solid #374151;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            padding: 32px;
+        }
+
+        header {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 16px;
+        }
+
+        /* === SECTION TITLES === */
+        section h2 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #9ca3af;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* === VOICE BUTTONS === */
+        .voice-button {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .voice-button.selected,
+        .voice-button.bg-gray-500 {
+            background-color: #6b7280;
+        }
+
+        .voice-button.bg-gray-700 {
+            background-color: #374151;
+        }
+
+        .voice-button.bg-gray-700:hover {
+            background-color: #4b5563;
+        }
+
+        /* === PLAY / PAUSE BUTTON === */
+        #play-pause-btn {
+            background-color: #6b7280;
+            border-radius: 50%;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        #play-pause-btn:hover {
+            background-color: #4b5563;
+            transform: scale(1.05);
+        }
+
+        #play-pause-btn:active {
+            transform: scale(1);
+        }
+
+        #play-pause-btn.bg-green-600 {
+            background-color: #16a34a;
+        }
+
+        #play-pause-btn.bg-green-600:hover {
+            background-color: #15803d;
+        }
+
+        #play-icon,
+        #pause-icon {
+            width: 48px;
+            height: 48px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #status-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #9ca3af;
+        }
+
+        /* === FOOTER SECTIONS === */
+        .footer-section {
+            padding-top: 24px;
+            border-top: 1px solid #374151;
+        }
+
+        .page-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1f2937;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .page-display span.label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .page-display input[type='number'] {
+            width: 64px;
+            height: 32px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .page-display input[type='number']:focus {
+            outline: none;
+            border-color: #9ca3af;
+            box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.4);
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+            -webkit-appearance: textfield;
+        }
+
+
+        /* === SLIDER === */
+        #speed-slider {
+            width: 100%;
+            height: 8px;
+            background-color: #374151;
+            border-radius: 8px;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        #speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #9ca3af;
+            cursor: pointer;
+            box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.3);
+        }
+
+        #speed-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #9ca3af;
+            cursor: pointer;
+        }
+
+        .flex-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            gap: 24px;
+        }
+
+        .voice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header>Noto</header>
+
+        <!-- Voice Section -->
+        <section>
+            <h2>Select Voice</h2>
+            <div class="voice-grid">
+                <button id="voice-noto" class="voice-button bg-gray-500 selected">
+                    Noto (Clear)
+                </button>
+                <button id="voice-leda" class="voice-button bg-gray-700">Leda (Upbeat)</button>
+                <button id="voice-kore" class="voice-button bg-gray-700">Kore (Firm)</button>
+                <button id="voice-zephyr" class="voice-button bg-gray-700">Zephyr (Bright)</button>
+            </div>
+        </section>
+
+        <!-- Playback Controls -->
+        <section class="flex-center">
+            <button id="play-pause-btn">
+                <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M4.5 5.653c0-1.427 1.529-2.348 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 20.353c-1.25.705-2.779-.217-2.779-1.643V5.653Z"
+                        clip-rule="evenodd" />
+                </svg>
+                <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="hidden">
+                    <path fill-rule="evenodd"
+                        d="M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25Zm7.5 0a.75.75 0 0 1 .75-.75H16.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75V5.25Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+            <p id="status-text">Ready to read.</p>
+        </section>
+
+        <!-- Footer -->
+        <section class="footer-section">
+            <div class="page-display">
+                <span class="label">Current Page</span>
+                <div>
+                    <input type="number" id="current-page-input" value="12" min="1" max="45" />
+                    <span style="font-size: 1.5rem; font-weight: 800;"> / 45</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <label for="speed-slider" class="label">Reading Speed</label>
+                    <span id="speed-value" style="font-weight: bold;">1.0x</span>
+                </div>
+                <input type="range" id="speed-slider" min="0.5" max="3.0" value="1.0" step="0.1" />
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            const statusText = document.getElementById('status-text');
+            const voiceButtons = document.querySelectorAll('.voice-button');
+            const pageInput = document.getElementById('current-page-input');
+            const totalPages = 45;
+            let isPlaying = false;
+            
+            /* This is my state for playing and pauding the audio. When the button is clicked
+            the statw is toggled. */
+            playPauseBtn.addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    playIcon.classList.add('hidden');
+                    pauseIcon.classList.remove('hidden');
+                    playPauseBtn.classList.add('bg-green-600');
+                    statusText.textContent = 'Reading aloud...';
+                } else {
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                    playPauseBtn.classList.remove('bg-green-600');
+                    statusText.textContent = 'Paused. Click to continue.';
+                }
+            });
+
+            speedSlider.addEventListener('input', (e) => {
+                speedValue.textContent = `${e.target.value}x`;
+            });
+
+            voiceButtons.forEach((btn) => {
+                btn.addEventListener('click', (event) => {
+                    voiceButtons.forEach((b) => {
+                        b.classList.remove('selected', 'bg-gray-500');
+                        b.classList.add('bg-gray-700');
+                    });
+                    event.currentTarget.classList.add('selected', 'bg-gray-500');
+                    console.log(`Voice selected: ${event.currentTarget.textContent.trim()}`);
+                });
+            });
+
+            pageInput.addEventListener('change', (event) => {
+                let value = parseInt(event.target.value);
+                if (isNaN(value) || value < 1) event.target.value = 1;
+                else if (value > totalPages) event.target.value = totalPages;
+            });
+        });
+    </script>
+    <script src="slider.js"></script>
+</body>
+
+</html>

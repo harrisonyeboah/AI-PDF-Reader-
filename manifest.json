@@ -1,0 +1,38 @@
+{
+    "manifest_version": 3,
+    "name": "PDF Reader Extension",
+    "version": "1.0.0",
+    "description": "A Chrome extension for reading PDFs with Django backend",
+    "permissions": [
+        "activeTab",
+        "storage",
+        "tabs",
+        "scripting"
+    ],
+    "host_permissions": [
+        "http://localhost:8000/*",
+        "https://localhost:8000/*",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "background": {
+        "service_worker": "client/background.js"
+    },
+    "action": {
+        "default_popup": "client/popup.html",
+        "default_title": "PDF Reader"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["client/content.js"],
+            "run_at": "document_idle"
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["client/*"],
+            "matches": ["<all_urls>"]
+        }
+    ]
+}

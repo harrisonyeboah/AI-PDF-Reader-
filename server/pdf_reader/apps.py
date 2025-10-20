@@ -1,9 +1,0 @@
-"""
-Django app for PDF Reader functionality.
-"""
-
-from django.apps import AppConfig
-
-class PdfReaderConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'pdf_reader'

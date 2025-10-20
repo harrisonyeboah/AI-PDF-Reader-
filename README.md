@@ -1,4 +1,4 @@
-# PDF Reader Chrome Extension & Django Server
+# Noto PDF Reader Chrome Extension & Django Server
 
 A Chrome extension for reading PDFs with a Django backend server.
 
@@ -12,23 +12,23 @@ PdfReader/
 │   ├── popup.js                  # Popup functionality
 │   ├── styles.css                # Extension styling
 │   ├── background.js             # Background script
-│   └── content.js                # Content script for web pages
+│   ├── content.js                # Content script for web pages
+│   └── slider.js                 # Slider functionality
 └── server/                       # Django backend server
     ├── manage.py                 # Django management script
     ├── requirements.txt          # Python dependencies
-    ├── pdf_reader_server/        # Django project settings
-    │   ├── __init__.py
-    │   ├── settings.py           # Django settings
-    │   ├── urls.py               # Main URL configuration
-    │   ├── wsgi.py               # WSGI configuration
-    │   └── asgi.py               # ASGI configuration
-    └── pdf_reader/               # Django app
+    └── noto_server/              # Django project settings
+        ├── __init__.py
+        ├── settings.py           # Django settings
+        ├── urls.py               # Main URL configuration
+        ├── wsgi.py               # WSGI configuration
+        └── asgi.py               # ASGI configuration
+    └── api/                      # Django API app
         ├── __init__.py
         ├── apps.py               # App configuration
         ├── models.py             # Database models
         ├── views.py              # API views
         ├── urls.py               # App URL configuration
-        ├── serializers.py        # API serializers
         ├── admin.py              # Admin interface
         └── tests.py              # Test cases
 ```
@@ -36,18 +36,18 @@ PdfReader/
 ## Features
 
 ### Chrome Extension (Client)
-- **PDF Upload**: Upload and view PDF files directly in the browser
-- **PDF Viewer**: Built-in PDF viewer with page navigation
+- **Modern UI**: Beautiful, dark-themed interface with Noto branding
+- **Voice Selection**: Multiple voice options (Noto, Leda, Kore, Zephyr)
+- **Playback Controls**: Play/pause functionality with visual feedback
+- **Page Navigation**: Current page display with input controls
+- **Speed Control**: Adjustable reading speed slider
 - **Content Detection**: Automatically detects PDF content on web pages
-- **Modern UI**: Beautiful, responsive interface with gradient design
-- **PDF.js Integration**: Uses PDF.js for client-side PDF rendering
 
 ### Django Server (Backend)
-- **REST API**: RESTful API endpoints for PDF management
-- **PDF Processing**: Server-side PDF processing and metadata extraction
-- **Annotation System**: Store and manage PDF annotations
+- **Simple API**: Basic Hello World endpoint for testing
+- **Health Check**: Server health monitoring endpoint
 - **CORS Support**: Configured for Chrome extension communication
-- **Admin Interface**: Django admin for managing PDFs and annotations
+- **REST Framework**: Ready for API development
 
 ## Setup Instructions
 
@@ -105,23 +105,28 @@ The Django server will be available at `http://localhost:8000`
 
 3. **Test the extension**:
    - Click the extension icon in the toolbar
-   - Upload a PDF file to test functionality
+   - Test the voice selection and playback controls
 
 ## API Endpoints
 
-### PDF Management
-- `GET /api/pdf/` - List all PDF documents
-- `POST /api/pdf/` - Create new PDF document
-- `GET /api/pdf/{id}/` - Get PDF document details
-- `PUT /api/pdf/{id}/` - Update PDF document
-- `DELETE /api/pdf/{id}/` - Delete PDF document
-- `POST /api/pdf/upload/` - Upload PDF from Chrome extension
-- `GET /api/pdf/{id}/info/` - Get PDF information
+### Basic Endpoints
+- `GET /api/hello/` - Returns Hello World message
+- `POST /api/hello/` - Returns Hello World with received data
+- `GET /api/health/` - Health check endpoint
 
-### Annotations
-- `GET /api/pdf/{id}/annotations/` - List PDF annotations
-- `POST /api/pdf/{id}/annotations/` - Create new annotation
-- `POST /api/pdf/{id}/annotations/add/` - Add annotation to PDF
+### Example Usage
+```bash
+# Test Hello World endpoint
+curl http://localhost:8000/api/hello/
+
+# Test with POST data
+curl -X POST http://localhost:8000/api/hello/ \
+  -H "Content-Type: application/json" \
+  -d '{"test": "data"}'
+
+# Health check
+curl http://localhost:8000/api/health/
+```
 
 ## Development
 
@@ -142,7 +147,7 @@ Access the Django admin at `http://localhost:8000/admin/` after creating a super
 ## Configuration
 
 ### Django Settings
-Key settings in `server/pdf_reader_server/settings.py`:
+Key settings in `server/noto_server/settings.py`:
 - `DEBUG = True` - Enable debug mode for development
 - `ALLOWED_HOSTS` - Configure allowed hosts
 - `CORS_ALLOW_ALL_ORIGINS = True` - Allow all origins (development only)
@@ -165,9 +170,9 @@ Key settings in `manifest.json`:
 ### Common Issues
 
 1. **CORS Errors**: Ensure Django CORS settings allow Chrome extension origins
-2. **PDF Upload Fails**: Check that the Django server is running on port 8000
+2. **API Connection Fails**: Check that the Django server is running on port 8000
 3. **Extension Not Loading**: Verify `manifest.json` syntax and file paths
-4. **PDF Rendering Issues**: Ensure PDF.js is properly loaded
+4. **Hello World Not Working**: Test the API endpoints with curl first
 
 ### Debug Mode
 - Enable Chrome DevTools for extension debugging

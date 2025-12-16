@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="popup.css" />
+    <title>Noto PDF Reader</title>
+</head>
+
+<body>
+    <div id="app">
+        <header>Noto</header>
+
+        <section class="flex-center">
+            <button id="play-pause-btn">
+                <svg id="play-icon" viewBox="0 0 24 24"></svg>
+                <svg id="pause-icon" class="hidden" viewBox="0 0 24 24"></svg>
+            </button>
+            <p id="status-text">Ready to read.</p>
+        </section>
+
+        <section class="footer-section">
+            <div class="page-display">
+                <span class="label">Current Page</span>
+                <div>
+                    <input type="number" id="current-page-input" value="1" />
+                    <span id="pageTotal" class="page-total"> / 45</span>
+                </div>
+            </div>
+
+            <div class="speed-wrapper">
+                <div class="speed-row">
+                    <label for="speed-slider">Reading Speed</label>
+                    <span id="speed-value">1.0x</span>
+                </div>
+                <input type="range" id="speed-slider" min="0.5" max="3" step="0.1" value="1.0" />
+            </div>
+        </section>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

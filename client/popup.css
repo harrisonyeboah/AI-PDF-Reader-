@@ -1,0 +1,192 @@
+/* ===== RESET / BASE ===== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-width: 400px;
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0d0e0f;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    color: white;
+}
+
+/* ===== APP CONTAINER ===== */
+#app {
+    width: 400px;
+    height: 600px;
+    background-color: #1b1c1d;
+    border: 1px solid #374151;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+}
+
+/* ===== HEADER ===== */
+header {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #374151;
+}
+
+/* ===== CENTER CONTROLS ===== */
+.flex-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+/* ===== PLAY / PAUSE BUTTON ===== */
+#play-pause-btn {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    border: none;
+    background-color: #6b7280;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+#play-pause-btn:hover {
+    background-color: #4b5563;
+    transform: scale(1.05);
+}
+
+#play-pause-btn:active {
+    transform: scale(1);
+}
+
+/* Icons */
+#play-icon,
+#pause-icon {
+    width: 48px;
+    height: 48px;
+    fill: currentColor;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ===== STATUS TEXT ===== */
+#status-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #9ca3af;
+}
+
+/* ===== FOOTER ===== */
+.footer-section {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid #374151;
+}
+
+/* ===== PAGE DISPLAY ===== */
+.page-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1f2937;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.page-display input[type="number"] {
+    width: 64px;
+    height: 32px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    background-color: #374151;
+    border: 1px solid #4b5563;
+    border-radius: 6px;
+}
+
+.page-display input[type="number"]:focus {
+    outline: none;
+    border-color: #9ca3af;
+}
+
+/* Remove number arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="number"] {
+    appearance: textfield;
+}
+
+/* Total pages */
+.page-total {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-left: 6px;
+}
+
+/* ===== SPEED CONTROL ===== */
+.speed-wrapper {
+    margin-top: 24px;
+}
+
+.speed-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+#speed-value {
+    font-weight: 700;
+}
+
+/* Slider */
+#speed-slider {
+    width: 100%;
+    height: 8px;
+    background-color: #374151;
+    border-radius: 8px;
+    appearance: none;
+    cursor: pointer;
+}
+
+#speed-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #9ca3af;
+}
+
+#speed-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #9ca3af;
+}
